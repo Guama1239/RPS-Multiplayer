@@ -34,10 +34,13 @@
         // Creates an array that lists out all of the options (Rock, Paper, or Scissors).
         var computerChoices = ["r", "p", "s"];
 
-        // Creating variables to hold the number of wins, losses, and ties. They start at 0.
+        // Creating variables to hold name, choice and the number of wins, losses, and ties. They start at 0.
+        var name = "puki";
+        var choice = "";
         var wins = 0;
         var losses = 0;
         var ties = 0;
+        
 
         // This function is run whenever the user presses a key.
         document.onkeyup = function (event) {
@@ -55,25 +58,18 @@
 
                 if ((userGuess === "r") && (computerGuess === "s")) {
                     wins++;
-                    database.ref().set({ winsC: wins });
                 } else if ((userGuess === "r") && (computerGuess === "p")) {
                     losses++;
-                    database.ref().set({ lossesC: losses });
                 } else if ((userGuess === "s") && (computerGuess === "r")) {
                     losses++;
-                    database.ref().set({ lossesC: losses });
                 } else if ((userGuess === "s") && (computerGuess === "p")) {
                     wins++;
-                    database.ref().set({ winsC: wins });
                 } else if ((userGuess === "p") && (computerGuess === "r")) {
                     wins++;
-                    database.ref().set({ winsC: wins });
                 } else if ((userGuess === "p") && (computerGuess === "s")) {
                     losses++;
-                    database.ref().set({ lossesC: losses });
                 } else if (userGuess === computerGuess) {
                     ties++;
-                    database.ref().set({ tiesC: ties });
                 }
 
                 // Creating a variable to hold our new HTML. Our HTML now keeps track of the user and computer guesses, and wins/losses/ties.
@@ -84,10 +80,27 @@
                     "<p>losses: " + losses + "</p>" +
                     "<p>ties: " + ties + "</p>";
 
+                //creates a temp object for holding player's data
+                var player = {
+                    name: name,
+                    choice: userGuess,
+                    wins: wins,
+                    losses: losses,
+                    ties: ties
+                }
+
+                // for the moment assuming player has the same (name) then update it with the .set?????????
+                if (name == "") {
+                    database.ref().set(player);
+               } else {
+                // uploads player data to database
+                database.ref().push(player)
+               }
                 // Set the inner HTML contents of the #game div to our html string
                 document.querySelector("#game").innerHTML = html;
             }
         };
+    
     </script>
 
 </body>
